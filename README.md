@@ -1,50 +1,181 @@
-# Welcome to your Expo app 👋
+# ReMindly - Votre assistant intelligent de rappels et d'organisation
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Application mobile React Native développée avec Expo pour planifier, organiser et recevoir des rappels automatiques.
 
-## Get started
+## 🚀 Fonctionnalités
 
-1. Install dependencies
+### Authentification
+- Inscription et connexion via Supabase Auth
+- Réinitialisation de mot de passe
+- Gestion du profil utilisateur
 
-   ```bash
-   npm install
-   ```
+### Gestion des événements
+- Création, modification et suppression d'événements
+- Catégories personnalisables (Réunion, Paiement, Rendez-vous, Vaccination, Anniversaire, etc.)
+- Répétition (quotidien, hebdomadaire, mensuel, annuel)
+- Rappels multiples (5 min, 15 min, 30 min, 1h, 1 jour avant)
+- Localisation optionnelle
 
-2. Start the app
+### Calendrier
+- Vue calendrier avec événements marqués
+- Filtres par date et catégorie
+- Vue des événements à venir
 
-   ```bash
-   npx expo start
-   ```
+### Notifications
+- Notifications push automatiques
+- Notifications locales programmées
+- Support des rappels multiples
 
-In the output, you'll find options to open the app in a
+### Fonctionnalités Premium (à venir)
+- Rappels illimités
+- Rappels géolocalisés
+- Coffre-fort chiffré
+- Assistant IA
+- Notifications SMS et Email
+- Synchronisation multi-appareils
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 📋 Prérequis
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- Node.js 18+ et npm/yarn
+- Expo CLI (`npm install -g expo-cli`)
+- Compte Supabase
+- Expo Go (pour tester sur appareil mobile)
 
-## Get a fresh project
+## 🛠 Installation
 
-When you're ready, run:
-
+1. **Cloner le projet**
 ```bash
-npm run reset-project
+git clone <repository-url>
+cd ReMindly
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. **Installer les dépendances**
+```bash
+npm install
+# ou
+yarn install
+```
 
-## Learn more
+3. **Configurer les variables d'environnement**
 
-To learn more about developing your project with Expo, look at the following resources:
+Créez un fichier `.env` à la racine du projet :
+```env
+EXPO_PUBLIC_SUPABASE_URL=votre_url_supabase
+EXPO_PUBLIC_SUPABASE_ANON_KEY=votre_cle_anon_supabase
+EXPO_PUBLIC_PROJECT_ID=votre_project_id_expo
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+4. **Configurer Supabase**
 
-## Join the community
+Exécutez le script SQL fourni dans `supabase/schema.sql` dans votre projet Supabase pour créer toutes les tables nécessaires.
 
-Join our community of developers creating universal apps.
+5. **Créer le bucket de stockage**
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Dans Supabase Storage, créez un bucket nommé `attachments` avec les permissions appropriées.
+
+6. **Lancer l'application**
+```bash
+npm start
+# ou
+yarn start
+```
+
+Puis scannez le QR code avec Expo Go (iOS) ou l'application Expo Go (Android).
+
+## 📁 Structure du projet
+
+```
+ReMindly/
+├── app/                    # Écrans et navigation (Expo Router)
+│   ├── (auth)/            # Écrans d'authentification
+│   ├── (tabs)/            # Écrans principaux (tabs)
+│   └── events/            # Écrans de gestion d'événements
+├── components/            # Composants réutilisables
+├── lib/                   # Configuration et utilitaires
+│   └── supabase.ts       # Client Supabase
+├── services/              # Services métier
+│   ├── auth.service.ts
+│   ├── events.service.ts
+│   └── notifications.service.ts
+├── stores/                # Stores Zustand
+│   ├── auth.store.ts
+│   └── events.store.ts
+├── types/                 # Types TypeScript
+│   └── index.ts
+└── assets/                # Images et ressources
+```
+
+## 🗄 Base de données
+
+Le schéma de base de données est défini dans le fichier SQL fourni. Les principales tables sont :
+
+- `categories` - Catégories d'événements
+- `events` - Événements
+- `reminders` - Rappels
+- `attachments` - Pièces jointes
+- `voice_notes` - Notes vocales
+- `groups` - Groupes collaboratifs
+- `premium_subscriptions` - Abonnements Premium
+- `geo_reminders` - Rappels géolocalisés (Premium)
+- `secure_files` - Fichiers sécurisés (Premium)
+
+## 🔐 Sécurité
+
+- Row Level Security (RLS) activé sur toutes les tables
+- Authentification JWT via Supabase
+- Chiffrement des données sensibles (Premium)
+- Permissions granulaires par utilisateur
+
+## 📱 Technologies utilisées
+
+- **React Native** - Framework mobile
+- **Expo** - Outils et services
+- **Expo Router** - Navigation basée sur les fichiers
+- **Supabase** - Backend (Auth, Database, Storage)
+- **Zustand** - Gestion d'état
+- **TypeScript** - Typage statique
+- **date-fns** - Manipulation de dates
+- **react-native-calendars** - Composant calendrier
+
+## 🚧 Développement
+
+### Scripts disponibles
+
+```bash
+npm start          # Démarrer le serveur de développement
+npm run android    # Lancer sur Android
+npm run ios        # Lancer sur iOS
+npm run web        # Lancer sur web
+npm run lint       # Vérifier le code
+```
+
+### Ajout de nouvelles fonctionnalités
+
+1. Créer les types dans `types/index.ts`
+2. Ajouter les services dans `services/`
+3. Créer/mettre à jour les stores dans `stores/`
+4. Créer les écrans dans `app/`
+5. Ajouter les composants réutilisables dans `components/`
+
+## 📝 TODO
+
+- [ ] Implémenter les groupes collaboratifs
+- [ ] Ajouter les rappels géolocalisés (Premium)
+- [ ] Intégrer l'assistant IA
+- [ ] Implémenter le coffre-fort sécurisé
+- [ ] Ajouter les notifications SMS/Email
+- [ ] Créer les Edge Functions Supabase
+- [ ] Ajouter les statistiques utilisateur
+- [ ] Implémenter les thèmes Premium
+
+## 📄 Licence
+
+Ce projet est sous licence MIT.
+
+## 👥 Contribution
+
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+
+## 📧 Support
+
+Pour toute question ou problème, veuillez ouvrir une issue sur GitHub.
