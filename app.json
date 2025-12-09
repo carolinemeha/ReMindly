@@ -38,11 +38,32 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#E6F4FE",
+          "sounds": []
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "ReMindly utilise votre localisation pour les rappels géolocalisés."
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "supabaseUrl": "https://onjhksdvygznhabrjiqj.supabase.co",
+      "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uamhrc2R2eWd6bmhhYnJqaXFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNTAzODgsImV4cCI6MjA4MDcyNjM4OH0.gMxUqkVtNc7BB8NM5qTUhqf01NyF_Rvj7lXV66fUEAk",
+      "eas": {
+        "projectId": "${EXPO_PUBLIC_PROJECT_ID}"
+      }
     }
   }
 }
