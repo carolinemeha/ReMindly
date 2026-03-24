@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { Session, User as SupabaseUser } from '@supabase/supabase-js';
 
 export interface SignUpData {
@@ -57,12 +57,14 @@ class AuthService {
   }
 
   async getSession(): Promise<Session | null> {
+    if (!isSupabaseConfigured) return null;
     const { data: { session }, error } = await supabase.auth.getSession();
     if (error) throw error;
     return session;
   }
 
   async getUser(): Promise<SupabaseUser | null> {
+    if (!isSupabaseConfigured) return null;
     const { data: { user }, error } = await supabase.auth.getUser();
     if (error) throw error;
     return user;

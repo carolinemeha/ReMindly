@@ -15,9 +15,24 @@ const supabaseAnonKey =
   process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 
   '';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('⚠️ Supabase URL ou clé manquante. Veuillez configurer les variables d\'environnement.');
-  console.warn('Configurez dans app.json ou via les variables d\'environnement EXPO_PUBLIC_SUPABASE_URL et EXPO_PUBLIC_SUPABASE_ANON_KEY');
+function isValidHttpUrl(url: string): boolean {
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+  try {
+    const u = new URL(trimmed);
+    return u.protocol === 'https:' || u.protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
+
+/** Évite les appels réseau inutiles quand .env / app.json ne sont pas renseignés. */
+export const isSupabaseConfigured =
+  isValidHttpUrl(supabaseUrl) && Boolean(supabaseAnonKey.trim());
+
+if (!isSupabaseConfigured) {
+  console.warn('⚠️ Supabase URL ou clé manquante / invalide. Veuillez configurer les variables d\'environnement.');
+  console.warn('Utilisez EXPO_PUBLIC_SUPABASE_URL (URL https) et EXPO_PUBLIC_SUPABASE_ANON_KEY dans .env ou app.json.');
 }
 
 // Créer le client Supabase avec AsyncStorage pour la persistance

@@ -1,5 +1,5 @@
 // Service pour les mises à jour en temps réel avec Supabase
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { Event, Reminder } from '@/types';
 import { RealtimeChannel } from '@supabase/supabase-js';
 
@@ -13,6 +13,7 @@ class RealtimeService {
     onUpdate: (event: Event) => void,
     onDelete: (eventId: string) => void
   ) {
+    if (!isSupabaseConfigured) return;
     const channelName = `events:${userId}`;
     
     // Nettoyer le channel existant s'il y en a un
@@ -69,6 +70,7 @@ class RealtimeService {
     userId: string,
     onUpdate: (reminder: Reminder) => void
   ) {
+    if (!isSupabaseConfigured) return;
     const channelName = `reminders:${userId}`;
     
     if (this.channels.has(channelName)) {

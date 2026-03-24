@@ -2,7 +2,7 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 // Configuration des notifications
 Notifications.setNotificationHandler({
@@ -68,9 +68,10 @@ class NotificationsService {
         tokenData = await Notifications.getExpoPushTokenAsync();
       }
     } catch (error: any) {
+      const msg = String(error?.message ?? error);
       // Si l'erreur est liée au projectId manquant, on logue un avertissement
       // mais on ne bloque pas l'application
-      if (error.message?.includes('projectId') || error.message?.includes('No \'projectId\'')) {
+      if (msg.includes('projectId') || msg.includes("No 'projectId'")) {
         console.warn(
           '⚠️ ProjectId Expo manquant. Les notifications push peuvent ne pas fonctionner.\n' +
           'Pour activer les notifications push, configurez votre Expo Project ID dans app.json:\n' +
@@ -83,7 +84,13 @@ class NotificationsService {
         );
         return null;
       }
-      // Pour les autres erreurs, on les propage
+      // Réseau indisponible ou Expo injoignable (simulateur, pare-feu, etc.)
+      if (msg.includes('Network request failed')) {
+        console.warn(
+          'Notifications push : impossible de joindre les serveurs Expo (réseau). Réessayez plus tard ou vérifiez la connexion.'
+        );
+        return null;
+      }
       console.error('Erreur lors de la récupération du token Expo Push:', error);
       throw error;
     }
@@ -135,6 +142,7 @@ class NotificationsService {
   }
 
   private async savePushToken(token: string) {
+    if (!isSupabaseConfigured) return;
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 

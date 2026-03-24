@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { Event, CreateEventInput, Reminder, Category } from '@/types';
 import { format } from 'date-fns';
 
@@ -275,6 +275,7 @@ class EventsService {
 
 
   async getCategories() {
+    if (!isSupabaseConfigured) return [];
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('Utilisateur non authentifié');
 
